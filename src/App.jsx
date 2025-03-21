@@ -9,27 +9,14 @@ import HeroSection from './Components/HeroSection';
 import { useState } from 'react';
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <BrowserRouter> {/* Wrap everything with BrowserRouter */}
-      <div>
-        <div>
-          {/* <NavBar/> */}
-          {/* <Layout /> */}
-          <HeroSection />
-        </div>
-
-        <div>
-          <Routes>
-            {/* Define your routes */}
-            {/* <Route path="/detailsfillingpage/*" element={<DetailsFillingPage />} /> */}
-            {/* <Route path="/myresume" element={<MyResume />} /> */}
-            {/* <Route path="/about" element={<AboutUs />} /> */}
-            <Route path="/home" element={<Home />} />
-            {/* <Route path="*" element={<Navigate to="/about" />} /> */}
-          </Routes>
-        </div>
+    <BrowserRouter>      {/* ONLY ONE Router here */}
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          {/* <Route path="/about" element={<About />} /> */}
+          {/* other routes */}
+        </Routes>
       </div>
     </BrowserRouter>
   );
