@@ -5,74 +5,57 @@ import { useDispatch } from "react-redux";
 import { updateState } from "../../ReduxManager/dataStoreSlice";
 import shortid from "shortid"; // Ensure shortid is installed and imported correctly
 
-//this Home component is rendering various resume templates on to the screen and the user can select either of them and proceed further.
+import './Home.css'; // Import the custom CSS file
+
 function Home() {
-  const [isMouseOver, setIsMouseOver] = useState("MouseIsNotOver"); //this state is used to display 'useTemplate' button when user hovers over the template
+  const [isMouseOver, setIsMouseOver] = useState("MouseIsNotOver"); // this state is used to display 'useTemplate' button when user hovers over the template
 
   const dispatch = useDispatch();
+
   return (
-    <div style={{ minWidth: "300px" }}>
-      <div className="d-flex justify-content-center mt-5">
-        <h3 className="p-2 rounded" style={{ backgroundColor: "aliceblue" }}>
-          Select a Template to get started!
-        </h3>
+    <div className="home-container">
+      <div className="header">
+        <h3>Select a Template to get started!</h3>
       </div>
 
-      <div className="container" style={{ color: "#1f4287" }}>
-        <div className="row">
-          {templateImagesPaths.map((currentTemplate) => {
-            return (
+      <div className="templates-container">
+        {templateImagesPaths.map((currentTemplate) => {
+          return (
+            <div className="template-card" key={shortid.generate()}>
               <div
-                className="col col-lg-3 col-md-6  col-12 mt-5"
-                key={shortid.generate()}
+                className="template-wrapper"
+                onMouseOver={() => setIsMouseOver(currentTemplate.name)}
+                onMouseOut={() => setIsMouseOver("MouseIsNotOver")}
               >
-                <div
-                  style={{ position: "relative" }}
-                  onMouseOver={() => {
-                    //this function allows us to display 'Use Template'button on the top of the targeted template, when the user hovers over it by setting state's value to the targeted template name.//
-                    setIsMouseOver(currentTemplate.name);
-                  }}
-                  onMouseOut={() => {
-                    //this function allows us to hide 'Use Template' button when the user moves out from the particular template//
-                    setIsMouseOver("MouseIsNotOver");
-                  }}
-                >
-                  <div className="w-100 d-flex justify-content-center">
-                    <h3>{currentTemplate.name}</h3>
-                  </div>
-                  <img
-                    className="w-100 image-aspect-ratio"
-                    src={currentTemplate.imageSource}
-                    alt="template"
-                  />
-                  {isMouseOver === currentTemplate.name ? ( //this conditional rendering is showing 'useTemplate' button when isMouseOver === currentTemplate.name //
-                    <Link to="/detailsfillingpage/personalinfo">
-                      <button
-                        className="btn btn-primary"
-                        style={{
-                          position: "absolute",
-                          top: "50%",
-                          right: "30%",
-                        }}
-                        onClick={() => {
-                          dispatch(
-                            updateState({
-                              //this dispatch function is used to update value of 'selectedTemplate' with the targetedTemplate in dataStoreSlice.js//
-                              key: "selectedTemplate",
-                              value: currentTemplate.name,
-                            })
-                          );
-                        }}
-                      >
-                        Use Template
-                      </button>
-                    </Link>
-                  ) : null}
+                <div className="template-name">
+                  <h3>{currentTemplate.name}</h3>
                 </div>
+                <img
+                  className="template-image"
+                  src={currentTemplate.imageSource}
+                  alt="template"
+                />
+                {isMouseOver === currentTemplate.name && (
+                  <Link to="/detailsfillingpage/personalinfo">
+                    <button
+                      className="use-template-btn"
+                      onClick={() => {
+                        dispatch(
+                          updateState({
+                            key: "selectedTemplate",
+                            value: currentTemplate.name,
+                          })
+                        );
+                      }}
+                    >
+                      Use Template
+                    </button>
+                  </Link>
+                )}
               </div>
-            );
-          })}
-        </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
